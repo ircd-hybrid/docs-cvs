@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: serverhide.sgml,v 1.4 2001/12/15 05:22:27 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: serverhide.sgml,v 1.5 2001/12/16 04:51:38 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
@@ -18,7 +18,7 @@
         Each option can be enabled or disabled at runtime.</para>
 
   <para>This document describes the Hybrid 7 implementation of the server
-        hiding ideas originated (and credited to) numerous people.</para>
+        hiding ideas originated by (and credited to) numerous people.</para>
 
   <itemizedlist>
     <listitem>
@@ -61,7 +61,7 @@
       </sidebar>
 
       <!-- Formatting issue....HACK -Hwy -->
-      <para> </para>
+      <para>&nbsp;</para>
     </listitem>
 
     <listitem>
@@ -75,7 +75,8 @@
       <sidebar>
         <para>Technically, this code is a hack.  With this option enabled,
               the server will prepend '<literal>(H) </literal>' to the server
-              info field when connecting to other servers.</para>
+              info field when connecting to other servers.  Other servers
+              must understand that the (H) means hidden.</para>
       </sidebar>
 
       <!-- Formatting issue....HACK -Hwy -->
@@ -113,11 +114,17 @@
     </listitem>
 
     <listitem>
-      <para>The <option>disable_local_channels</option> will not allow users
-            to join local <emphasis>&amp;channels</emphasis>.  This option
+      <para>The <option>disable_local_channels</option> option will not allow
+            users to join local <emphasis>&amp;channels</emphasis>.  This option
             is a little extreme, taking away a lot of user privilege.  It
             was created to handle the possible hole in server hide shown below.
             </para>
+    </listitem>
+
+    <listitem>
+      <para>All server modes appear to originate from the server you are
+            using.  This feature is not tunable; and opers also do not
+            see the real server setting the mode.</para>
     </listitem>
   </itemizedlist>
 
@@ -144,10 +151,11 @@
             on.</para>
 
       <para>If an abuser knows that a user is on a specific &amp;channel, they
-            could still connect to each server until they find the server.
-            I don't believe there is a way we can avoid this unless local
-            channels are completely disabled with server hiding code
-            enabled.</para>
+            could still connect to each server until they find the server
+            showing the user in the local channel in a local
+            <command>WHOIS</command>.  The
+            <option>disable_local_channels</option> option has been created to
+            handle this risk.</para>
     </sect2>
   </sect1>
 

@@ -56,7 +56,7 @@
       <step>
         <para>Configure all servers specified with a <option>hub {}</option>
               block in <filename>efserv.conf</filename> to accept the services
-              pseudoserver linkage.  This will involve configuring
+              pseudo-server linkage.  This will involve configuring
               <command>C:</command>, <command>N:</command>, and
               <command>H:</command> lines (or their equivalents).</para>
       </step>
@@ -125,7 +125,7 @@
             operator to receive alerts on network-wide cloning.  The format
             of the notice is similar to what is given on EFnet
             <emphasis>services.us</emphasis>.  The behavior of
-            <application>efserv</application> is proactive in notifying
+            <application>efserv</application> is pro-active in notifying
             opers, rather than waiting for a <command>CLONES</command>
             command.</para>
 
@@ -155,7 +155,7 @@
     <sect2>
       <title>Using Admin</title>
 
-      <para>Services administraor access is controlled by the
+      <para>Services administrator access is controlled by the
             <command>ADMIN</command>.  The syntax is as follows:</para>
 
 <screen>
