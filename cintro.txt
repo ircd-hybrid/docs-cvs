@@ -1,0 +1,193 @@
+($Id: cintro.txt,v 1.1 2001/08/08 02:56:18 wcampbel Exp $)
+
+                    CINTRO an alternative protocol to SJOIN
+                    =======================================
+
+	(By Diane Bruce <db@db.net>, David Taylor <davidt@yadt.co.uk>
+	 and Lee Hardy <lee@leeh.co.uk>)
+
+
+Introduction
+------------
+
+  This document describes the current protocol for introducing clients
+between servers during server bursts (SJOIN). SJOIN is shown to be inefficent
+for client bursts. We propose a vastly simplified protocol for this task.
+
+SJOIN and MODE
+-----
+
+  SJOIN is currently used to introduce new clients to a remote server
+both for server bursts and for new clients joining a channel remotely.
+
+To refresh, its syntax is as following:
+
+:server.prefix SJOIN TS Channel_name modebuf parabuf :nicks
+
+Where TS is (currently) a 9 digit number giving the time since the epoch.
+Channel_name is the channel being introduced
+
+modebuf is a list of modes being passed in
+parabuf is a list of parameters for the above modes
+
+nicks is a list of up to four nicks either with a @ prefix for a chanop
++ prefix for voiced, % for halfop and finally no prefix for non op.
+
+  In a server burst the follwing happens..
+
+A list of SJOINs is done for all clients on a channel. i.e.
+
+:irc.bighub.on.efnet.net SJOIN 991525841 #twilight_zone +stin + :@Larz\
+ @comstud @Dianora Flashman
+:irc.bighub.on.efnet.net SJOIN 991525841 #twilight_zone +stin + :@TheRose\
+ @wjr %DeeCee +CBongoo
+
+There then follows a MODE of bans (and possible +e and +I if supported)
+
+:irc.bighub.on.efnet.net MODE #twilight_zone +bb *!*@*.someisp.net *!*@anotherisp.net
+
+...
+
+  Notice that the full channel name is given each time, that the channel time
+stamp and channel modes are repeated, perhaps many times for a large channel.
+
+  SJOIN is highly wasteful of bandwidth and expensive to parse.
+
+CINTRO
+------
+
+  The format of CINTRO is as follows, note each channel is introduced
+exactly once.
+
+:server.prefix CINTRO TS Channel_name channel_id chan_modes limit key
+
+channel_id is a small integer given by the uplink, it serves to identify
+the introduction of further clients to this channel using a small int.
+Ths channel_id can be cached per server mapping directly internally to the
+channel structure neded.
+
+chan_modes is a strict list of modes for the channel i.e. sint
+If the channel is modeless a '-' will be sent.
+
+limit is the channel limit, if no channel limit a 0 is sent.
+
+key is the channel key, if no key is present a '*' is sent.
+
+i.e. for a modeless channel, with no limits and no key
+
+:server.prefix CINTRO 999999999 #no_modes 10 - 0 * 
+
+For a channel that is +sint, no limit no key
+
+:server.prefix CINTRO 999999999 #secret 11 sint 0 *
+
+For a channel that is +nt no limit and key
+
+:server.prefix CINTRO 999999999 #keyed 12 nt 0 key
+
+For a channel with a limit and key
+
+:server.prefix CINTRO 999999999 #limit_key 15 ntkl 15 keyed
+
+If chan_modes contains an unknown mode, it is ignored locally then 
+passed on anyway.  This will help maintain compatibility for older hubs, 
+when/if new channel modes are added.
+
+If the new channel mode contains a parameter, it shall be placed on the 
+end of the CINTRO command, so adding +f 20 would send this:
+
+:server.prefix CINTRO 999999999 #mode_chan fnt 0 * 20
+
+The local server would ignore the f and parse the other modes, and only 
+parse upto the key.  The full string would be passed on however, to stop 
+mode "patches" on parts of the network.
+
+
+Each list of masks (bans, exempts, auto-invites) is sent as follows: [1]
+
+:server.prefix CMASKS channel_id b ban_ts person!who@set.ban *!*@*.ms
+:server.prefix CMASKS channel_id b ban_ts Set!by@some.guy *!*@*aol.com
+:server.prefix CMASKS channel_id e ban_ts some!oth@er.guy *!nice@*.aol.com
+:server.prefix CMASKS channel_id I ban_ts some!chan@o.p *!chan@o.p
+ 
+
+[1] Sending the hostmask of the person setting the MASK and the ban_ts could 
+    be bandwidth intensive.  This should be reviewed before implementation.
+    If it is decided that sending these is too bandwidth intensive, multiple
+    +beI modes could be supported in one CMASKS, as follows:
+
+    :server.prefix CMASKS channel_id b *!*@*.ms *!*@*.aol.com *!*@*.abuse.com
+
+    Upto the limit of the buffer size, after which they are sent on another line.
+
+The same rules as above apply here.  If we receive a CMASKS for a mode 
+we dont know:
+
+:server.prefix CMASKS channel_id z ban_ts person!who@set.mode *!*@*
+
+  It would be ignored locally, then passed on to any other servers
+
+  If the channel ts is higher than our channel ts, we ignore the incoming
+masks (and other modes).  If the channel ts is lower than our channel ts,
+we use the incoming bans, and drop our masks (and other modes).  If the two
+timestamps are equal, we merge the masks (and other modes).
+
+CMASKS must be sent before users.  This is because in future, support for
+stopping split riding (people joining a +ik channel on a split) may be needed.
+By sending the modes and CMASKS first, you do not have to keep a list of joins
+that need to be sent to local users.  You can check modes first, then MASKS
+when they come.  You would then receive users, and anyone who hasnt been
+removed from the channel, can see the users joining.  This split protection
+does NOT form part of the sjoin replacement, it is just noted here for
+future compatibility.
+
+The channel topic (if any) is then sent as:
+
+:server.prefix CTOPIC channel_id topic_ts nuh!of@topic.setter :Topic
+
+If the channel TS is equal, use the topic with the higher TS[2].  If both
+topic timestamps are equal, ignore the incoming topic (which should be the
+same as the local topic in any case).  If our TS is lower, we use our topic,
+otherwise we use the incoming topic.
+
+[2] Maybe we should use the older topic, but I think using the newest
+available topic is probably more useful.
+
+  This would probably increase the bandwidth used during a burst slightly,
+since we don't currently send topics or the n!u@h of the person who set a
+ban, but it would help keep +beI and topics synchronised across the
+network.
+
+  Each list of clients is introduced separately as follows
+
+:server.prefix CHOPS channel_id nick1 nick2 nick3 nick4
+:server.prefix CVOICE channel_id nick5 nick6 nick7 nick8
+:server.prefix COPS  channel_id nick9 nick10 nick11 nick12
+:server.prefix CNOPS  channel_id nick13 nick14 nick15 nick16
+
+Where "COPS" introduces channel ops
+"CHOPS" introduces channel half ops
+"CVOICE" introduces channel voiced members
+"CNOPS" introduces channel non ops
+
+  There needs to be no "end of channel burst" sent, as the next CINTRO
+would end this list.
+
+So for #twilight_zone as an example:
+
+:irc.bighub.on.efnet CINTRO 991525841 #twilight_zone 1 stin 0 *
+:irc.bighub.on.efnet COPS 1 :Larz comstud Dianora Flashman
+:irc.bighub.on.efnet CHOPS 1 :TheRose wjr DeeCee CBongoo
+:irc.bighub.on.efnet CVOICE 1 :visitor
+:irc.bighub.on.efnet CNOPS 1 :Doel docGonzo Jon2 loki-
+
+  The very last channel is immediately followed by an EOB (for
+End of Burst). 
+
+Conclusion
+----------
+
+  The use of CINTRO would greatly reduce duplicate information introduction
+on a server burst. It would be less of a "win" for smaller channels.
+It would in most cases reduce the bandwidth and increase the speed of a
+server burst.
