@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: INSTALL.sgml,v 1.6 2002/03/07 13:25:55 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: INSTALL.sgml,v 1.7 2002/04/06 17:11:58 wcampbel Exp $</releaseinfo>
   </articleinfo>
 
   <sidebar>
@@ -127,10 +127,38 @@
           </listitem>
 
           <listitem>
-            <para><option>--disable-assert</option>  - Disable some of the
+            <para><option>--disable-assert</option> - Disable some of the
                   debugging code.  This should be used on all production
                   servers for maximum speed and to prevent cores from things
-                  that shouldn't normally happen.
+                  that shouldn't normally happen.</para>
+          </listitem>
+
+          <listitem>
+            <para><option>--enable-small-net</option> - Tunes the server for
+                  smaller networks by reducing the startup memory footprint.
+                  This should really only be used for
+                  <emphasis>*small*</emphasis> networks, as this tends to be
+                  a performance hit on larger networks.</para>
+          </listitem>
+
+          <listitem>
+            <para><option>--with-nicklen</option> - Sets the maximum NICK
+                  length.  Note that this must be consistant across your
+                  entire network.</para>
+          </listitem>
+
+          <listitem>
+            <para><option>--with-maxclients</option> - Sets the maximum number
+                  of clients support by the server. Note that this also
+                  twiddles the HARD_FDLIMIT_ define so it is no longer
+                  necessary to modify <filename>include/config.h</filename> for
+                  this.  If HARD_FDLIMIT_ ends up being larger that FD_SETSIZE
+                  when using select() for your I/O loop,
+                  <filename>s_bsd_select.c</filename> will refuse to
+                  compile (and tell you to use poll instead).  Take this error's
+                  advice and use --enable-poll or something a bit more
+                  efficient.  You'll be happier at the end of the day for it.
+                  </para>
           </listitem>
         </itemizedlist>
       </step>
@@ -139,13 +167,8 @@
         <para>Look over the "<filename>include/config.h</filename>" file.  This
               allows you to change the few remaining hard coded options of how
               the ircd will operate.  Most admins will only have to change a
-              few settings.  <literal>HARD_FDLIMIT_</literal> and
-              <literal>INIT_MAXCLIENTS</literal> are two that must be changed
-              to the proper values for your operating system.  Note that these
-              two settings must be <= <literal>FD_SETSIZE</literal> (usually
-              defined in the system includes, but may need to overridden in
-              the <filename>Makefile</filename>).  <literal>USE_SYSLOG</literal>
-              is the final one that most admins will need to edit.</para>
+              few settings.  <literal>USE_SYSLOG</literal> is the only one that
+              most admins will need to edit.</para>
 
          <note>
            <para>Note that you must have permission by the sysadmin to send
@@ -279,7 +302,7 @@
 
       <step>
         <para>Save the output of the backtrace command and send it to
-              <ulink url="listmanager@the-project.org">listmanager@the-project.org</ulink>.</para>
+              <ulink url="ircd-hybrid@the-project.org">ircd-hybrid@the-project.org</ulink>.</para>
       </step>
 
       <step>
