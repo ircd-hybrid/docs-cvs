@@ -1,0 +1,60 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+  <articleinfo>
+    <title>Server VERSION Info</title>
+
+    <author>
+      <firstname>W.</firstname>
+      <surname>Campbell</surname>
+      <affiliation>
+        <address><email>wcampbel@botbay.net</email></address>
+      </affiliation>
+    </author>
+
+    <copyright>
+      <year>2001</year>
+      <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
+    </copyright>
+
+    <pubdate role="rcs">$Date: 2001/11/05 00:56:53 $</pubdate>
+
+    <releaseinfo>$Id: server-version-info.sgml,v 1.1 2001/11/05 00:56:53 wcampbel Exp $</releaseinfo>
+  </articleinfo>
+
+  <para>Updated for Hybrid 7 (2000/12/28)</para>
+
+    <para>When you type <command>/version</command>, you will often see
+          something like this:</para>
+<screen>
+hybrid-7beta7(20010803_2). irc.leeh.co.uk egGHIKMpTZp TS3ow
+</screen>
+
+    <para>Ever wondered what those funny chars mean after the version number?
+          Well here they are:</para>
+
+    <informaltable>
+      <tgroup cols="2">
+        <tbody>
+          <row><entry>'D'</entry><entry>DEBUGMODE</entry></row>
+          <row><entry>'e'</entry><entry>USE_EXCEPT</entry></row>
+          <row><entry>'g'</entry><entry>NO_FAKE_GLINES</entry></row>
+          <row><entry>'G'</entry><entry>GLINES</entry></row>
+          <row><entry>'H'</entry><entry>HUB</entry></row>
+          <row><entry>'I'</entry><entry>USE_INVEX</entry></row>
+          <row><entry>'K'</entry><entry>USE_KNOCK</entry></row>
+          <row><entry>'M'</entry><entry>IDLE_FROM_MSG</entry></row>
+          <row><entry>'p'</entry><entry>CRYPT_OPER_PASSWORD</entry></row>
+          <row><entry>'T'</entry><entry>IGNORE_BOGUS_TS</entry></row>
+          <row><entry>'Y'</entry><entry>USE_SYSLOG</entry></row>
+          <row><entry>'Z'</entry><entry>ZIPLINKS</entry></row>
+          <row><entry>'6'</entry><entry>IPv6</entry></row>
+          <row><entry></entry><entry></entry></row>
+          <row><entry>'TS'</entry><entry>Supports TS</entry></row>
+          <row><entry>'5'</entry><entry>TS Version 5</entry></row>
+          <row><entry>'o'</entry><entry>TS Only</entry></row>
+          <row><entry>'w'</entry><entry>TS Warnings</entry></row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+</article>

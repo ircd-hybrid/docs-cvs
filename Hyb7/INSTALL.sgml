@@ -9,9 +9,9 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <pubdate role="rcs">$Date: 2001/11/01 00:56:38 $</pubdate>
+    <pubdate role="rcs">$Date: 2001/11/05 00:56:53 $</pubdate>
 
-    <releaseinfo>$Id: INSTALL.sgml,v 1.1 2001/11/01 00:56:38 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: INSTALL.sgml,v 1.2 2001/11/05 00:56:53 wcampbel Exp $</releaseinfo>
   </articleinfo>
 
   <sidebar>
@@ -104,8 +104,8 @@
           </listitem>
 
           <listitem>
-            <para><option>--enable-ipv6</option>    - Enable IPv6 server and
-                  client support.</para>
+            <para><option>--enable-ipv6</option>    - Enable IPv6
+                  support.</para>
           </listitem>
 
           <listitem>
