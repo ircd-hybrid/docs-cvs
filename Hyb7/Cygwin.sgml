@@ -14,7 +14,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: Cygwin.sgml,v 1.1 2002/01/27 01:57:25 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: Cygwin.sgml,v 1.2 2002/01/28 17:27:32 wcampbel Exp $</releaseinfo>
 
     <abstract>
       <para>Brief instructions for Cygwin compilation.</para>
@@ -121,7 +121,117 @@
   <sect1>
     <title>Customizing the Static Modules</title>
 
-    <para>XXX - To be completed...</para>
+    <para>Using additional modules, not included with the base Hybrid 7
+          distribution, is a little complicated and requires some code
+          modifications.</para>
+
+    <para>Extra modules must be compiled statically into the
+          <command>ircd</command> binary, and have their
+          <varname>msgtab</varname> loaded into the command parser.  This
+          requires changes to the <filename>Makefile</filename> and the
+          <filename>modules.c</filename> source file.</para>
+
+    <para>When you decide on the module(s) you wish to add to ircd, you must
+          make the following changes to the files.  For the following examples,
+          suppose that we want to add the <filename>m_map.c</filename> and
+          <filename>m_jupe.c</filename> modules to the ircd.
+          <footnote><para>This section is applicable to any platform.  If an
+          administrator wishes to have a truly secure server, they can have
+          modules disabled.  This section allows, for example, a hub server
+          to statically compile <command>JUPE</command> into her server, and
+          avoid the security risks associated with dynamically loadable modules.
+          </para></footnote></para>
+
+    <procedure>
+      <step><para>The desired modules must be copied into the
+                  <filename>modules/</filename></para></step>
+
+      <step><para>The <filename>modules/Makefile.in</filename> file must be
+                  edited to include the desired modules.</para>
+
+            <para>In the <filename>modules/Makefile.in</filename> file,
+                  you must add the two module source files to the
+                  <option>SRCS</option> line.  Below is the excerpt from the
+                  file showing the edits.</para>
+
+            <screen>
+  m_who.c \
+  m_whois.c \
+  <userinput>m_jupe.c \</userinput>
+  <userinput>m_map.c \</userinput>
+  m_whowas.c
+
+ALL_SRCS = $(CORE_SRCS) \
+            </screen></step>
+
+      <step><para>The <filename>src/modules.c</filename> file must also be
+                  modified to load the new modules into the command parser.
+                  This is done in the <function>load_all_modules()</function>
+                  function at the bottom of the file.<footnote><para>There are
+                  two <function>load_all_modules()</function> functions in
+                  <filename>src/modules.c</filename>.  The needed one is the
+                  one at the bottom of the file; the one that is enabled
+                  when dynamic modules are disabled.</para></footnote>  The
+                  new commands are loaded by adding
+                  <function>mod_add_cmd()</function> calls to the
+                  function.</para>
+
+            <para>The following excerpt shows what parts need to be added to
+                  load the <command>JUPE</command> and <command>MAP</command>
+                  commands to a statically compiled ircd.</para>
+
+            <screen>
+        mod_add_cmd(&amp;wallops_msgtab);
+        mod_add_cmd(&amp;who_msgtab);
+        mod_add_cmd(&amp;whois_msgtab);
+        <userinput>mod_add_cmd(&amp;jupe_msgtab);</userinput>
+        <userinput>mod_add_cmd(&amp;map_msgtab);</userinput>
+        mod_add_cmd(&amp;whowas_msgtab);
+}
+
+#endif /* STATIC_MODULES */
+            </screen></step>
+
+      <step><para>Any changes to <filename>src/modules.c</filename> must
+                  be accompanied by a change to
+                  <filename>include/modules.h</filename>.  The 
+                  <varname>msgtab</varname> variables for the new modules must
+                  be declared in this header file in order to compile
+                  ircd.</para>
+
+            <para>The following excerpt shows what must be added.</para>
+
+            <screen>
+extern struct Message wallops_msgtab;
+extern struct Message who_msgtab;
+extern struct Message whois_msgtab;
+<userinput>extern struct Message jupe_msgtab;</userinput>
+<userinput>extern struct Message map_msgtab;</userinput>
+extern struct Message whowas_msgtab;
+
+extern void load_all_modules(int check);
+
+#endif /* STATIC_MODULES */
+#endif /* INCLUDED_modules_h */
+            </screen></step>
+
+      <step><para><command>configure</command> must be rerun in order for the
+                  changes to <filename>modules/Makefile.in</filename> to
+                  take effect.</para></step>
+
+      <step><para>Compile and install ircd as you normally would.</para>
+
+            <warning><para>Some modules are not set up for static compilation;
+                           as such, these modules will need to be modified.
+                           This can be done by putting the line:
+                           <userinput>#ifndef STATIC_MODULES</userinput> above
+                           the definition of the
+                           <function>_modinit()</function>, and by putting the
+                           line:  <userinput>#endif</userinput> below the
+                           definition of the <varname>_version</varname>
+                           variable.  ircd must be recompiled after changing
+                           the modules.</para></warning></step>
+    </procedure>
   </sect1>
 
 </article>
