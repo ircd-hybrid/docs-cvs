@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: INSTALL.sgml,v 1.4 2001/12/16 04:51:38 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: INSTALL.sgml,v 1.5 2002/02/05 04:04:08 wcampbel Exp $</releaseinfo>
   </articleinfo>
 
   <sidebar>
@@ -26,6 +26,8 @@
     <important>
       <!-- XXX - set the link here -->
       <para>The old config format WILL NOT WORK.  Please see point 6!</para>
+
+      <para>The old kline format WILL NOT WORK.  Please see point 7!</para>
     </important>
   </sidebar>
 
@@ -194,7 +196,7 @@
               <application>Hybrid 6</application>, the config file has changed
               drastically...</para>
 
-        <para>There is a utility to convert your old config file, to the new
+        <para>There is a utility to convert your old config file to the new
               format.  In
               <replaceable>prefix</replaceable><filename>/bin</filename> there
               is something called "<command>convertconf</command>".  Its usage
@@ -206,6 +208,26 @@
               and EDIT IT!  There are still things that need changing in the
               config, including the fact that classes <emphasis>MUST</emphasis>
               be above auth/connect blocks!</para>
+      </step>
+
+      <step>
+        <para>If you are upgrading from <application>Hybrid 5</application> or
+              <application>Hybrid 6</application>, the kline file has also
+              changed...</para>
+
+        <para>There is a utility to convert the old kline configuration file
+              to the new format.  In
+              <replaceable>prefix</replaceable><filename>/bin</filename> there
+              is a program called "<command>convertklines</command>".  Its
+              usage is:  <command>./convertklines</command> <option>(old
+              kline.conf filename) (new kline.conf filename)
+              (dline.conf filename)</option>.</para>
+
+        <para>Once this is done, move the new files into the
+              <replaceable>prefix</replaceable><filename>/etc/</filename>
+              directory under their proper names.  By default, the kline
+              file is named <filename>kline.conf</filename> and the dline
+              file is named <filename>dline.conf</filename>.</para>
       </step>
     </procedure>
   </sect1>
