@@ -1,0 +1,81 @@
+Hybrid SGML Documentation FAQ
+
+(This will be converted to SGML in the future)
+
+SGML is superior for writing documentation in since it is a format and
+system independent language.  SGML documents can be parsed into a number
+of forms, including plain text, HTML, PostScript, RTF, and PDF.  The look
+of the output is not defined in the documentation, but by the SGML backend
+software and Data Type Definitions.  The documenter can concentrate on
+the important parts, content and information, as opposed to worrying about
+formatting.  Documentation can then be transferred to others in a variety
+of forms.
+
+For now, we will be using the standard DocBook V4.1 Data Type Definition.
+There are a few things that must be installed if you wish to process the
+SGML file.  All of these are included in FreeBSD's textproc/docproj port*.
+
+The most important ones are:
+
+The DocBook and other DTD's
+jade - The SGML parser
+tidy - The HTML cleaner (since the output HTML is very dirty and hard to read)
+links - Text based web browser, used to produce nice looking txt output
+nsgmls - The SGML verifier
+
+There are some environment variables that have to be set if you are going
+to use any of the SGML tools.  These are documented in section 3.2.1 of the
+FreeBSD documentation listed below.
+
+I will include a template SGML file, that all docs can be based off of.  This
+doc will contain all of the most needed tags, so that content can easily be
+plugged in.
+
+The SGML file can be edited using any text editor.
+
+The SGML file can be checked and verified for accuracy using the following
+command:
+
+nsgmls -s docname.sgml
+
+The HTML output can be generated using the following command**:
+
+jade -V nochunks -c /usr/local/share/sgml/docbook/dsssl/modular/catalog \
+  -c /usr/local/share/sgml/docbook/catalog \
+  -c /usr/local/share/sgml/jade/catalog \
+  -d /usr/local/share/sgml/docbook/dsssl/modular/html/docbook.dsl \
+  -t sgml docname.sgml >docname.html
+
+Note that this is a very time consuming process.
+
+The resulting docname.html is extremely ugly and hard to read.  The tidy
+program is then used to clean it up.  The syntax is:
+
+tidy -m docname.html
+
+The HTML output is now clean and useable in any web browser.
+
+Text output can be produced by running the tidy'ed html file through links.
+The syntax is as follows:
+
+links -dump docname.html >docname.txt
+
+Generating TeX, PostScript, or PDF is beyond my knowledge, and beyond most
+people's abilities***.
+
+A good resource for information is the FreeBSD Doc Project's manual, available
+at http://www.freebsd.org/doc/en_US.ISO8859-1/books/fdp-primer/index.html
+(a non-split version is available on:
+ http://www.freebsd.org/doc/en_US.ISO8859-1/books/fdp-primer/book.html )
+
+--
+
+* - One of the docproj dependencies is peps, which depends on GhostScript,
+    which depends on freetype, which cannot be installed without X11.  peps
+    is not something that we need, so you may have to install all of the
+    docproj tools EXCEPT for this.
+
+** - This is of course dependent on FreeBSD locations.  Linux and Solaris
+     users are unfortunately on their own
+
+*** - TeX is needed to do anything with PostScript of PDF.

@@ -1,0 +1,48 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+  <articleinfo>
+    <title>Document Title</title>
+
+    <author>
+      <firstname>Your</firstname>
+      <surname>Name</surname>
+      <affiliation>
+        <address><email>you@some.host.name</email></address>
+      </affiliation>
+    </author>
+
+    <copyright>
+      <year>200x</year>
+      <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
+    </copyright>
+
+    <pubdate role="rcs">$Date: 2001/10/30 18:33:48 $</pubdate>
+
+    <releaseinfo>$Id: hybrid-template.sgml,v 1.1 2001/10/30 18:33:48 wcampbel Exp $</releaseinfo>
+
+    <abstract>
+      <para>Include a brief description of the document here.</para>
+    </abstract>
+  </articleinfo>
+
+  <sect1>
+    <title>This is the first section</title>
+
+    <para>This is the first paragraph in the first section.</para>
+
+    <sect2>
+      <title>This is a subsection</title>
+
+      <para>This is a paragraph in the subsection.</para>
+
+      <para>This is as well.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>This is section 2</title>
+
+    <para>Each section has it's paragraphs.</para>
+  </sect1>
+</article>
