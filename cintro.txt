@@ -1,4 +1,4 @@
-($Id: cintro.txt,v 1.1 2001/08/08 02:56:18 wcampbel Exp $)
+($Id: cintro.txt,v 1.2 2001/11/19 17:00:12 wcampbel Exp $)
 
                     CINTRO an alternative protocol to SJOIN
                     =======================================
