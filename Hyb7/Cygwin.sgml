@@ -14,7 +14,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: Cygwin.sgml,v 1.4 2002/02/02 23:18:15 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: Cygwin.sgml,v 1.5 2002/04/25 14:39:27 wcampbel Exp $</releaseinfo>
 
     <abstract>
       <para>Brief instructions for Cygwin compilation.</para>
@@ -25,7 +25,7 @@
     <para>Cygwin support is not complete, however is does work.  The Hybrid
           developers do not recommend using Cygwin as a production platform
           for IRC servers.  Cygwin support is primarily included only for
-          testing purposes, and to verify that the daemon will compile with
+          testing purposes, and, to verify that the daemon will compile with
           a baseline POSIX system.</para>
   </important>
 
@@ -111,8 +111,9 @@
                       with runtime resolvable symbols.  Modules can only be
                       configured statically, and as such, you can only use
                       the stock Hybrid 7 modules without code modifications.
-                      The modifications will be described in a future version
-                      of this document.</para></listitem>
+                      Please refer to the <link linkend="static">Static
+                      Modules Section</link> of this document for more
+                      information.</para></listitem>
 
       <listitem><para><command>make</command> cannot currently generate
                       index files for the help system.  The
@@ -133,7 +134,7 @@
     </itemizedlist>
   </sect1>
 
-  <sect1>
+  <sect1 id="static">
     <title>Customizing the Static Modules</title>
 
     <para>Using additional modules, not included with the base Hybrid 7
