@@ -17,9 +17,9 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <pubdate role="rcs">$Date: 2001/11/08 05:43:31 $</pubdate>
+    <pubdate role="rcs">$Date: 2001/11/08 14:29:49 $</pubdate>
 
-    <releaseinfo>$Id: serverhide.sgml,v 1.2 2001/11/08 05:43:31 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: serverhide.sgml,v 1.3 2001/11/08 14:29:49 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
@@ -47,9 +47,6 @@
             by users issuing <command>LINKS</command> commands, and if a
             server is split, users can still see what other servers are
             normally available.</para>
-
-      <para>XXX - Does setting <option>links_delay</option> to
-            <literal>0</literal> disable this?</para>
     </listitem>
 
     <listitem>
@@ -78,7 +75,7 @@
     </listitem>
 
     <listitem>
-      <para>Hidden hub option:  This option will hide the server from a
+      <para>Hidden server option:  This option will hide the server from a
             flattened <command>LINKS</command> list on other servers.
             Opers will of course see the true routing of the network.</para>
 
@@ -97,7 +94,8 @@
 
     <listitem>
       <para>The <option>allow_hidden</option> option is needed to allow servers
-            to use the <option>hidden</option> described above.</para>
+            to use the <option>hidden</option> server option described
+            above.</para>
     </listitem>
 
     <listitem>
@@ -116,6 +114,12 @@
             and similar commands.  A server with this option enabled will
             only prevent local users from issuing remote commands.  Remote
             users will not be affected.</para>
+
+      <para>Remote <command>WHOIS</command> is not blocked.  It is, however,
+            restricted to only querying <command>WHOIS <replaceable>nick
+            nick</replaceable></command>.  The ircd will disregard the
+            server parameter and always use queried
+            <replaceable>nick</replaceable>.</para>
     </listitem>
   </itemizedlist>
 
