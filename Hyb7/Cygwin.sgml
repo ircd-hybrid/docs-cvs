@@ -14,7 +14,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: Cygwin.sgml,v 1.2 2002/01/28 17:27:32 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: Cygwin.sgml,v 1.3 2002/01/30 21:22:24 wcampbel Exp $</releaseinfo>
 
     <abstract>
       <para>Brief instructions for Cygwin compilation.</para>
@@ -29,7 +29,7 @@
           a baseline POSIX system.</para>
   </important>
 
-  <sect1>
+  <sect1 id="requirements">
     <title>Requirements</title>
 
     <para>A reasonably current Cygwin installation is needed.  The following
@@ -47,6 +47,13 @@
     <para>All of these programs are installed with the default Cygwin install.
           If you customize the installation, however, you must be sure that all
           of the needed packages are installed.</para>
+
+    <para>Another package is needed at the present time to properly generate
+          help files during the build process.  This package is available at
+          <ulink url="http://ircd.botbay.net/pub/hybrid/cygwin/column.exe.gz">
+          http://ircd.botbay.net/pub/hybrid/cygwin/column.exe.gz</ulink>
+          and must be installed into <filename>/bin</filename> inside of Cygwin.
+          </para>
   </sect1>
 
   <sect1>
@@ -107,7 +114,11 @@
       <listitem><para><command>make</command> cannot currently generate
                       index files for the help system.  The
                       <command>column</command> command is not present on
-                      Cygwin.</para></listitem>
+                      Cygwin.  A Cygwin package containing a port of the
+                      <command>column</command> command is available from the
+                      Hybrid developers.  Please look at the
+                      <link linkend="requirements">Requirements</link> section
+                      above.</para></listitem>
 
       <listitem><para><command>make install</command> does not properly handle
                       the .exe file extension.  As a consequence, when the
