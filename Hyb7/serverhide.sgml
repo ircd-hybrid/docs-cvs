@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: serverhide.sgml,v 1.6 2001/12/30 05:31:03 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: serverhide.sgml,v 1.7 2002/01/02 15:29:42 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
@@ -93,6 +93,12 @@
       <para>The <option>hide_servers</option> option forces the server to
             not be shown when a user issues <command>WHOIS</command> and
             other commands which may show what server a user is on.</para>
+
+      <para>Local user counts, as normally displayed in
+            <command>LUSERS</command>, <command>USERS</command>, and the 255
+            numeric, will be shown with the same values as the global counts.
+            Displaying it this way will help protect servers and avoid breaking
+            scripts that depend on the 265 and 266 numerics on connect.</para>
 
       <para>To be effective, this option must be used network wide.</para>
     </listitem>
