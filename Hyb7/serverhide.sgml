@@ -1,0 +1,156 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+  <articleinfo>
+    <title>Server Hide Reference</title>
+
+    <author>
+      <firstname>Wendy</firstname>
+      <surname>Campbell</surname>
+      <affiliation>
+        <address><email>wcampbel@botbay.net</email></address>
+      </affiliation>
+    </author>
+
+    <copyright>
+      <year>2001</year>
+      <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
+    </copyright>
+
+    <pubdate role="rcs">$Date: 2001/11/08 05:12:30 $</pubdate>
+
+    <releaseinfo>$Id: serverhide.sgml,v 1.1 2001/11/08 05:12:30 wcampbel Exp $</releaseinfo>
+
+  </articleinfo>
+
+  <para>Due to pressures from abusers, the Hybrid developers have created
+        a set of options to limit what users can and cannot do on the server.
+        Each option can be enabled or disabled at runtime.</para>
+
+  <para>This document describes the Hybrid 7 implementation of the server
+        hiding ideas originated (and credited to) numerous people.</para>
+
+  <itemizedlist>
+    <listitem>
+      <para><command>LINKS</command> as a file:  This option is always enabled.
+            It will generate a file at a certain interval, defined by the
+            <option>links_delay</option> in <filename>ircd.conf</filename>,
+            that contains the current <command>LINKS</command> data.  This
+            data is sent to users whenever a <command>LINKS</command> is
+            requested.  Opers will always see the current server structure.
+            </para>
+
+      <para>The file that the <command>LINKS</command> data is stored in is
+            by default <filename>etc/links.txt</filename>.</para>
+
+      <para>The benefits of this are that transient splits will not be seen
+            by users issuing <command>LINKS</command> commands, and if a
+            server is split, users can still see what other servers are
+            normally available.</para>
+
+      <para>XXX - Does setting <option>links_delay</option> to
+            <literal>0</literal> disable this?</para>
+    </listitem>
+
+    <listitem>
+      <para>Flattened <command>LINKS</command>:  This option forces every
+            server to look as if it is connected to the local server.
+            Users will see a flat <command>LINKS</command> tree.</para>
+
+      <para>The benefit to using <command>LINKS</command> flattening is
+            that users cannot get information on how servers are routed.</para>
+
+      <para>The <option>flatten_links</option> in the <literal>serverhide
+            {}</literal> block in the <filename>ircd.conf</filename> controls
+            this feature.</para>
+
+      <para>As a side effect, all netsplits will appear to originate from
+            the local server.</para>
+
+      <sidebar>
+        <para>Flattened <command>LINKS</command> is needed for any network
+              that uses the hidden hub option.  See below for more details.
+              </para>
+      </sidebar>
+
+      <!-- Formatting issue....HACK -Hwy -->
+      <para> </para>
+    </listitem>
+
+    <listitem>
+      <para>Hidden hub option:  This option will hide the server from a
+            flattened <command>LINKS</command> list on other servers.
+            Opers will of course see the true routing of the network.</para>
+
+      <para>This option is controlled by the <option>hidden</option> in
+            <filename>ircd.conf</filename>.</para>
+
+      <sidebar>
+        <para>Technically, this code is a hack.  With this option enabled,
+              the server will prepend '<literal>(H) </literal>' to the server
+              info field when connecting to other servers.</para>
+      </sidebar>
+
+      <!-- Formatting issue....HACK -Hwy -->
+      <para> </para>
+    </listitem>
+
+    <listitem>
+      <para>The <option>allow_hidden</option> is needed to allow servers
+            to use the <option>hidden</option> described above.</para>
+    </listitem>
+
+    <listitem>
+      <para>The <option>hide_servers</option> option forces the server to
+            not be shown when a user issues <command>WHOIS</command> and
+            other commands which may show what server a user is on.</para>
+
+      <para>To be effective, this option must be used network wide.</para>
+    </listitem>
+
+    <listitem>
+      <para>The <option>disable_remote_commands</option> option takes care
+            of most of the remaining issues.  These include, for example,
+            <command>ADMIN <replaceable>some.hub.server</replaceable></command>,
+            <command>VERSION <replaceable>someuser</replaceable></command>,
+            and similar commands.  A server with this option enabled will
+            only prevent local users from issuing remote commands.  Remote
+            users will not be affected.</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>Each item is briefly described in the <literal>serverhide {}</literal>
+        block in <filename>ircd.conf</filename>.</para>
+
+  <sect1>
+    <title>Questions and Answers</title>
+
+    <sect2>
+      <title>&amp;channels and remote <command>WHOIS</command></title>
+
+      <para>I brought this up a short while ago; and there are some holes in
+            server hide at the present time with local channels.  The issue
+            I raised, if a user is known to be in a local channel, issuing
+            <command>WHOIS <replaceable>servera nick</replaceable></command>,
+            <command>WHOIS <replaceable>serverb nick</replaceable></command>,
+            etc. until the local channel is seen in the WHOIS data does not
+            exist.  With <option>disable_remote_commands</option> enabled,
+            the <command>WHOIS</command> is still sent (in order to see idle
+            time and the away message) but the server queried will always be
+            the server the user is on.  The user can never use remote
+            <command>WHOIS</command> to determine the server a user is
+            on.</para>
+
+      <para>If an abuser knows that a user is on a specific &amp;channel, they
+            could still connect to each server until they find the server.
+            I don't believe there is a way we can avoid this unless local
+            channels are completely disabled with server hiding code
+            enabled.</para>
+    </sect2>
+  </sect1>
+
+  <!-- Hack...a plain para cannot be used after any section is defined -Hwy -->
+  <index>
+    <para>XXX - Fill me in with other questions and possible issues</para>
+  </index>
+</article>
