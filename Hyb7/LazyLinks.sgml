@@ -1,0 +1,92 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+  <articleinfo>
+    <title>The LazyLinks Protocol Specification</title>
+
+    <copyright>
+      <year>2001</year>
+      <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
+    </copyright>
+
+    <releaseinfo>$Id: LazyLinks.sgml,v 1.1 2001/12/30 05:32:19 wcampbel Exp $</releaseinfo>
+
+  </articleinfo>
+
+  <para>The LazyLink system allows a leaf server to avoid the need for a
+        complete connection burst when it connects to its hub.  The LazyLink
+        system allows smaller leaf servers to use far less bandwidth
+        and memory than a standard server link.  The leaf server will also
+        be able to recover from a split faster than a it normally would.
+        Small, localized servers are most likely to benefit from LazyLinks.
+        </para>
+
+  <para>LazyLinks allows a server to only have referenced users and channels
+        bursted to it.</para>
+
+  <sect1>
+    <title>Connection Burst</title>
+
+    <para>The connection burst for a LazyLink leaf server is far simpler
+          and shorter than a non-LazyLink server.  From the hub, only the
+          list of servers is bursted.  The leaf server will conduct a normal
+          burst, sending all users and channels it knows about to the hub.
+          The hub will see this and send back what it knows about any channels
+          referenced.</para>
+
+    <para>Once the burst is complete, only channel changes pertaining in some
+          way to what the leaf already knows about are propogated from the hub
+          to the leaf.  Users that have already been burst will continue to be
+          tracked.  Users that request information from the leaf server
+          (remote WHOIS, STATS, VERSION, ADMIN) will be introduced to the leaf
+          server; users sending a PRIVMSG or NOTICE to a user on the leaf will
+          be introduced, and opers issuing WALLOPS or OPERWALL will also be
+          introduced.</para>
+
+  <sect1>
+    <title>Nick Protocol</title>
+
+    <para>In some cases, a leaf server will need to have a user bursted to it
+          that is not in some way linked to a channel that it is interested in.
+          The <command>NBURST</command> command is used to request this
+          information.  The basic syntax of the NBURST command is:</para>
+
+    <screen>
+<command>:<replaceable>lazy.leaf.server</replaceable> NBURST <replaceable>nick_requested</replaceable> <replaceable>[nick_who_issued_command]</replaceable> <replaceable>[extra_text]</replaceable></command>
+    </screen>
+
+    <para>There are currently three forms of the NBURST command.
+          They are: requesting information on a remote user, checking for an
+          existing user, and requesting a nick change.  The syntax of the
+          specific commands are:</para>
+
+    <para>Simply requesting a specific user's information:</para>
+
+    <screen>
+<command>:<replaceable>lazy.leaf.server</replaceable> NBURST <replaceable>nick</replaceable></command>
+    </screen>
+
+    <para>The hub server will simply send the user requested as a NICK command.
+          If the user is not known, no response is sent by the hub.</para>
+
+    <note>
+      <title>Implementation Note</title>
+      <para>The current implementation of Hybrid 7 has ISON use this version
+            of the <command>NBURST</command> command.</para>
+    </note>
+
+  </sect1>
+
+  <sect1>
+    <title>Channel Protocol</title>
+
+    <para>XXX</para>
+  </sect1>
+
+  <sect1>
+    <title>Other Protocol Changes</title>
+
+    <para>XXX</para>
+  </sect1>
+
+</article>
