@@ -4,22 +4,12 @@
   <articleinfo>
     <title>KNOCK Reference</title>
 
-    <author>
-      <firstname>Wendy</firstname>
-      <surname>Campbell</surname>
-      <affiliation>
-        <address><email>wcampbel@botbay.net</email></address>
-      </affiliation>
-    </author>
-
     <copyright>
       <year>2001</year>
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <pubdate role="rcs">$Date: 2001/11/07 06:34:18 $</pubdate>
-
-    <releaseinfo>$Id: knock.sgml,v 1.1 2001/11/07 06:34:18 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: knock.sgml,v 1.2 2001/12/15 16:34:48 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
@@ -29,6 +19,10 @@
 
   <para>The concept of <command>KNOCK</command> is credited to Dianora
         &lt;db@db.net&gt; and written by &lt;anonymous&gt;</para>
+
+  <para>The main part of this document covers the Hybrid 6 implementation
+        of <command>KNOCK</command>.  The Hybrid 7 implementation is covered
+        in the appendix.</para>
 
   <para>Due to the possibility of abuse, <command>KNOCK</command> is rate
         limited in two different ways.  <command>KNOCK</command> is controlled
@@ -91,4 +85,52 @@
 :<replaceable>server</replaceable> 461 <replaceable>user</replaceable> KNOCK :Not enough parameters
 </screen>
 
+  <appendix>
+    <title>Hybrid 7 Changes to KNOCK</title>
+
+    <para>KNOCK in Hybrid 7 has been modified in order to handle VChans.
+          The syntax used is the same as <command>JOIN</command>; a single
+          ! after the channel name to list valid VChans, and a !key to
+          send a <command>KNOCK</command> to the specific channel view.
+          </para>
+
+    <para>Hybrid 7 replaces all notices with numerics.  Below is a list
+          of all numerics that <command>KNOCK</command> sends.</para>
+
+    <screen>
+:<replaceable>server</replaceable> 276 <replaceable>user</replaceable> <replaceable>rootchan</replaceable> :has <replaceable>number</replaceable> possible virtual channels available
+:<replaceable>server</replaceable> 277 <replaceable>user</replaceable> <replaceable>listing of vchan keys</replaceable>
+:<replaceable>server</replaceable> 278 <replaceable>user</replaceable> :Type /knock <replaceable>channel</replaceable> &lt;key&gt; to specify the channel you want
+:<replaceable>server</replaceable> 403 <replaceable>user</replaceable> <replaceable>channel</replaceable> :No such channel
+:<replaceable>server</replaceable> 404 <replaceable>user</replaceable> <replaceable>channel</replaceable> :Cannot send to channel
+:<replaceable>server</replaceable> 479 <replaceable>user</replaceable> <replaceable>channel</replaceable> :Illegal channel name
+:<replaceable>server</replaceable> 710 <replaceable>user</replaceable> <replaceable>channel</replaceable> <replaceable>nick</replaceable>!<replaceable>username</replaceable>@<replaceable>hostname</replaceable> :has asked for an invite.
+:<replaceable>server</replaceable> 711 <replaceable>user</replaceable> <replaceable>channel</replaceable> :Your KNOCK has been delivered.
+:<replaceable>server</replaceable> 712 <replaceable>user</replaceable> <replaceable>channel</replaceable> :Too many KNOCKs (<replaceable>user|channel</replaceable>).
+:<replaceable>server</replaceable> 713 <replaceable>user</replaceable> <replaceable>channel</replaceable> :Channel is open.
+:<replaceable>server</replaceable> 714 <replaceable>user</replaceable> <replaceable>channel</replaceable> :You are already on that channel.
+:<replaceable>server</replaceable> 715 <replaceable>user</replaceable> :KNOCKs are disabled.
+    </screen>
+
+    <sect1>
+      <title>Hybrid 7's Conf Options</title>
+
+      <para>Hybrid 7 uses options in the <filename>ircd.conf</filename> file to
+          tune how <command>KNOCK</command> operates.</para>
+
+      <para>The <option>use_knock</option> option in the
+            <option>channel</option> block is the <emphasis>"master
+            switch"</emphasis> for everything.  <command>KNOCK</command> will
+            not function if this option is off.</para>
+
+      <para>The <option>knock_delay</option> option in the
+            <option>channel</option> block defines how often a user can issue
+            the <command>KNOCK</command> command.</para>
+
+      <para>The <option>knock_delayi_channel</option> options in the
+            <option>channel</option> block defines how often a channel can
+            receive a <command>KNOCK</command>.  This option is new in
+            Hybrid 7.</para>
+    </sect1>
+  </appendix>
 </article>
