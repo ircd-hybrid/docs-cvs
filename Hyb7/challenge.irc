@@ -1,0 +1,101 @@
+# challenge.irc -- authenticate to a hybrid-7 server with challenge response
+#                  oper authentication.  --gnp (xyst)
+# note: this is almost gauranteed to not work if your key needs a passphrase
+#
+# credit goes to hop for pipe from the default script archive, which doesn't
+# work, but gave me a framework for execing stuff and getting the response.
+
+# For Hybrid's cvs...
+# $Id: challenge.irc,v 1.1 2002/04/30 18:36:45 wcampbel Exp $
+
+xecho ... Loading challenge.irc by xyst, feer.
+
+# you might want to change these..
+
+@challenge.path=[~/.irc/respond]
+@challenge.key=[~/.irc/challenge.identity]
+@challenge.num=0
+@challenge.response=[]
+@challenge.savepath=[~/.irc/challenge.config]
+
+alias rsaconfig {
+	if ([$0])
+	{
+		switch ($tolower($0)) 
+		{
+			(resppath) 
+			{
+				if ([$1])
+				{
+					@challenge.resp=[$1]
+					xecho $G Challenge -- resppath is now: $1
+				} {
+					xecho $G Challenge -- resppath: $challenge.path
+				}
+			}
+			(keypath)
+			{
+				if ([$1])
+				{
+					@challenge.key=[$1]
+					xecho $G Challenge -- keypath is now: $1
+				} {
+					xecho $G Challenge -- keypath: $challenge.key
+				}
+			}
+			(save)
+			{
+				@unlink($challenge.savepath)
+				@fd=open($challenge.savepath W)
+				@write($fd @challenge.path=[$challenge.path])
+				@write($fd @challenge.key=[$challenge.key])
+				@close($fd)
+				xecho $G Challenge -- saved settings.
+			}
+			(*)
+			{
+				xecho $G Usage: /rsaconfig <resppath|keypath> [value]
+			}
+		}
+	} {
+		xecho $G Current settings for challenge.irc:
+		rsaconfig resppath
+		rsaconfig keypath
+		xecho $G Type /rsaconfig <resppath|keypath> <value> to change these, /rsaconfig save saves them.
+	}
+}
+
+alias challenge {
+	if ([$0])
+	{
+		^quote challenge $0
+	} {
+		xecho $G Usage: /challenge <username>
+	}
+}
+
+on ^386 * {
+	xecho $G Got oper-challenge from server, sending response..
+	@challenge.num++
+	^on ^exec "chall$challenge.num *" {
+		@challenge.response=[$1]
+	}
+	^exec -name chall$challenge.num $challenge.path $challenge.key $1
+	^wait %chall$challenge.num
+	^on exec -"chall$challenge.num *"
+	^stack push on raw_irc
+	^stack push on 381
+	^on ^raw_irc "$S 464 *" { xecho $G Challenge incorrect.  Check your key.;^stack pop on raw_irc;^stack pop on 381 }
+	^on -381 * { ^stack pop on 381;^stack pop on raw_irc }
+	^quote challenge +$challenge.response
+}
+
+if ([$fexist($challenge.savepath)] > 0)
+{
+	xecho $G Loading settings from $challenge.savepath ..
+	^load $challenge.savepath
+} {
+	xecho $G Config file not found, try /rsaconfig save\; using defaults.
+}
+
+rsaconfig

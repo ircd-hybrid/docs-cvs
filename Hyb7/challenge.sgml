@@ -1,4 +1,6 @@
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!ENTITY challenge.irc SYSTEM "challenge.irc">
+]>
 
 <article>
   <articleinfo>
@@ -9,7 +11,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: challenge.sgml,v 1.4 2002/02/01 04:10:47 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: challenge.sgml,v 1.5 2002/04/30 18:36:45 wcampbel Exp $</releaseinfo>
   </articleinfo>
 
   <para>In an effort to reduce the damage caused to a network by a
@@ -74,16 +76,29 @@
           command as follows:</para>
 
     <screen>
-      <userinput>openssl genrsa -des3 -out rsa.key 1024</userinput>
-      <userinput>openssl rsa -in rsa.key -pubout -out rsa.pub</userinput>
+      openssl genrsa -des3<co id="co-des3"> -out rsa.key 1024<co id="co-keysize">
+      openssl rsa -in rsa.key -pubout -out rsa.pub
     </screen>
+
+    <calloutlist>
+      <callout arearefs="co-des3">
+        <para>The <option>-des3</option> must be included in order to create
+              a key with a passphrase.  Omitting this option will create
+              a non protected key.</para>
+      </callout>
+
+      <callout arearefs="co-keysize">
+        <para>The key size must be 1024 or below.  The challenge sent for a
+              longer keysize will be too long to fit into the ircd's 512 byte
+              line constraint.</para>
+      </callout>
+    </calloutlist>
 
     <para>It is <emphasis>highly recommended</emphasis> that you set a
           password on your private key.</para>
 
-    <para>A key pair can also be generated with the
-          <command>tools/mkkeypair</command> utility.  No password will be
-          set, however.</para>
+    <para>The <command>tools/mkkeypair</command> utility cannot be used to
+          create a key suitable for use in CHALLENGE.</para>
   </sect1>
 
   <sect1>
@@ -238,5 +253,30 @@ Keyphrase:
           password, and may (if the key is kept secure, and has a good
           passphrase) virtually eliminate hacked O-lines.</para>
   </sect1>
+
+  <appendix>
+    <title>Numerics</title>
+
+    <para>XXX - Complete after testing callouts and includes</para>
+  </appendix>
+
+  <appendix>
+    <title>Scripting</title>
+
+    <para>The following script is for EPIC 4 only.  It was written by
+          Greg Prosser, xyst
+          &lt;<ulink url="gregp@blackened.net">gregp@blackened.net</ulink>&gt;.
+          </para>
+
+    <para>XXX - passphrase protected keys cannot be used here</para>
+
+    <programlisting>
+      <!-- Do a raw insert of the contents of the challenge.irc file -->
+
+      <![ RCDATA [
+&challenge.irc;
+      ]]>
+    </programlisting>
+  </appendix>
 
 </article>
