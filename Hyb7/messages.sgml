@@ -4,22 +4,12 @@
   <articleinfo>
     <title>Message Customization Overview</title>
 
-    <author>
-      <firstname>W.</firstname>
-      <surname>Campbell</surname>
-      <affiliation>
-        <address><email>wcampbel@botbay.net</email></address>
-      </affiliation>
-    </author>
-
     <copyright>
       <year>2001</year>
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <pubdate role="rcs">$Date: 2001/11/05 02:07:24 $</pubdate>
-
-    <releaseinfo>$Id: messages.sgml,v 1.1 2001/11/05 02:07:24 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: messages.sgml,v 1.2 2001/12/15 05:22:27 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
