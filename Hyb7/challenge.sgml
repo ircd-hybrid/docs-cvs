@@ -11,8 +11,29 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: challenge.sgml,v 1.5 2002/04/30 18:36:45 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: challenge.sgml,v 1.6 2002/07/18 01:27:41 wcampbel Exp $</releaseinfo>
   </articleinfo>
+
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="hyblogo-white.png">
+    </imageobject>
+
+    <textobject>
+      <literallayout class="monospaced">
+ _ ircd      _          _     _ 
+| |__  _   _| |__  _ __(_) __| |
+| '_ \| | | | '_ \| '__| |/ _` |
+| | | | |_| | |_) | |  | | (_| |
+|_| |_|\__, |_.__/|_|  |_|\__,_|
+       |___/                    
+      </literallayout>
+    </textobject>
+
+    <textobject>
+      <phrase>ircd-hybrid</phrase>
+    </textobject>
+  </mediaobject>
 
   <para>In an effort to reduce the damage caused to a network by a
         <emphasis>hacked</emphasis> O-line, Hybrid supports an
@@ -257,7 +278,16 @@ Keyphrase:
   <appendix>
     <title>Numerics</title>
 
-    <para>XXX - Complete after testing callouts and includes</para>
+    <screen>
+:<replaceable>server</replaceable> 381 <replaceable>user</replaceable> :You have entered... the Twilight Zone!.
+:<replaceable>server</replaceable> 386 <replaceable>user</replaceable> :<replaceable>challenge-text</replaceable>
+:<replaceable>server</replaceable> 464 <replaceable>user</replaceable> :Password Incorrect
+:<replaceable>server</replaceable> 491 <replaceable>user</replaceable> :Only few of mere mortals may try to enter the twilight zone
+    </screen>
+
+    <note>
+      <para>The text used can be changed by the server administrator.</para>
+    </note>
   </appendix>
 
   <appendix>
@@ -268,7 +298,10 @@ Keyphrase:
           &lt;<ulink url="gregp@blackened.net">gregp@blackened.net</ulink>&gt;.
           </para>
 
-    <para>XXX - passphrase protected keys cannot be used here</para>
+    <para>Please note that passphrase protected keys cannot be used in
+          conjunction with this script.</para>
+
+    <para>BEGIN challenge.irc</para>
 
     <programlisting>
       <!-- Do a raw insert of the contents of the challenge.irc file -->
