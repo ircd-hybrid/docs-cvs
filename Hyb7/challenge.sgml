@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: challenge.sgml,v 1.3 2001/12/21 04:56:58 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: challenge.sgml,v 1.4 2002/02/01 04:10:47 wcampbel Exp $</releaseinfo>
   </articleinfo>
 
   <para>In an effort to reduce the damage caused to a network by a
@@ -35,6 +35,10 @@
           defeat the purpose of the challenge system.</para>
 
     <para><filename>m_challenge.so</filename> must be loaded.</para>
+
+    <para>The oper has their private key file and an implementation of the
+          <link linkend="rsarespond">RSA Respond tool</link> available to
+          be run.</para>
   </sect1>
 
   <sect1>
@@ -78,24 +82,18 @@
           password on your private key.</para>
 
     <para>A key pair can also be generated with the
-          <command>tools/mkkeypair</command> utility.</para>
-
-    <para>There is a tool called <command>respond</command> in
-          <filename>tools/rsa_respond</filename> in the
-          <application>Hybrid</application> source tree.  This program can
-          be easily distributed to each oper.</para>
-
-    <para>A script is included in the <filename>Makefile</filename> to create
-          a distributable tar file from the source tree.  Issue
-          <userinput>make rsa_respond</userinput> from the root of the source
-          tree to create the <filename>rsa_respond.tar.gz</filename> archive.
-          This can then be distributed to all of the server operators.  Look
-          at the <filename>README</filename> in the tar archive for more
-          detailed instructions.</para>
+          <command>tools/mkkeypair</command> utility.  No password will be
+          set, however.</para>
   </sect1>
 
   <sect1>
     <title>Using CHALLENGE and respond</title>
+
+    <!-- ugh, Netscape 4.x doesn't support &trade;, so I have to use &copy; -->
+    <note><para>All examples assume the use of the stock
+                <command>respond</command> client included with the Hybrid 7
+                source, run on a <trademark class="copyright">UNIX</trademark>
+                platform.</para></note>
 
     <para>The administrator of the server you oper on should remove the
           password in your <literal>oper {}</literal> block and replace it
@@ -137,9 +135,10 @@ F983B3E062F635912FA155B4B1E18EAA782CC107F4C9DA83092658D16A2E88A
       <screen><prompt>$</prompt> <command>./respond</command> <userinput>private_key_file</userinput> <userinput>challenge_from_server</userinput>
       </screen>
 
-    </sidebar>
+      <!-- HTML (and therefore txt) is fine with two sidebars in a row...  --
+        -- print versions (TeX, PDF, PostScript) are not.  These two       --
+        -- sidebars have to be merged together -Hwy                        -->
 
-    <sidebar>
       <para>Example:</para>
 
       <screen><prompt>wcampbel@botbay (rsa_respond):</prompt> <command>./respond hwy.key \
@@ -155,7 +154,7 @@ Keyphrase:
        </note>
     </sidebar>
 
-    <para>The keyphase must be entered properly to get the response.  The
+    <para>The keyphrase must be entered properly to get the response.  The
           bottom line is the response that must be sent back to the
           server.</para>
 
@@ -174,11 +173,58 @@ Keyphrase:
           server.</para>
 
     <warning>
-      <para>If the <command>CHALLENGE</command> fails, and you use ircii,
+      <para>If the <command>CHALLENGE</command> fails, and you use ircII,
             EPIC, or BX, you may get disconnected with the client asking
             for the server password.  This is a client bug, not an ircd
             bug.</para>
     </warning>
+  </sect1>
+
+  <sect1 id="rsarespond">
+    <title>RSA Respond Tool</title>
+
+    <para>The RSA Respond tool is a vital part of challenge/response system.
+          In order to function, the operator must have must have a way to
+          quickly issue the respond command, and to copy and paste data to and
+          from the IRC client.</para>
+
+    <para>The <command>respond</command> source code is included with the
+          Hybrid 7 source, in the <filename>tools/rsa_respond</filename>
+          directory.  A distributable tar file can easily be created by
+          issuing <userinput>make rsa_respond</userinput> in the root of the
+          source tree.  The file <filename>rsa_respond.tar.gz</filename> will
+          be created in the root of the source tree.</para>
+
+    <para><filename>rsa_respond.tar.gz</filename> should compile with little
+          or no modifications<footnote><para>Some platforms may require
+          <filename>Makefile</filename> changes in order to link in the OpenSSL
+          library.  This may change in the future.</para></footnote> on most
+          <trademark class="copyright">UNIX</trademark> and UNIX-like
+          platforms<footnote>
+          <para>Platforms known to function include: Linux, FreeBSD, Solaris,
+          and Cygwin.</para></footnote>.  The <filename>README</filename> in
+          the tar archive gives more information.</para>
+
+    <para>A copy of the source tar file is available on <ulink
+          url="http://ircd.botbay.net/pub/hybrid/rsa/rsa_respond.tar.gz">http://ircd.botbay.net/pub/hybrid/rsa/rsa_respond.tar.gz</ulink>.
+
+    <para>For Windows platforms, there are two available RSA Respond tools.
+          One is a text only port of the stock tool.  The binary is available
+          from <ulink url="http://ircd.botbay.net/pub/hybrid/rsa/rsa_respond-bin.tar.gz">http://ircd.botbay.net/pub/hybrid/rsa/rsa_respond-bin.tar.gz</ulink>.
+          The other tool is a GUI enabled version<footnote><para>A screenshot
+          of the program is available on <ulink
+          url="http://kabel.pp.ru/sgml/winrespond.png">http://kabel.pp.ru/sgml/winrespond.png</ulink>
+          .</para></footnote>.  The source tree<footnote>
+          <para>The winrespond source depends on a working, up to date, Cygwin
+          installation.</para></footnote> is available from <ulink
+          url="http://ircd.botbay.net/pub/hybrid/rsa/winrespond-src.tar.gz">http://ircd.botbay.net/pub/hybrid/rsa/winrespond-src.tar.gz</ulink>.
+          A binary distribution is available from <ulink
+          url="http://ircd.botbay.net/pub/hybrid/rsa/winrespond-bin.tar.gz">http://ircd.botbay.net/pub/hybrid/rsa/winrespond-bin.tar.gz</ulink>.
+          </para>
+
+    <para>With the appropriate version of the RSA Respond tool, any operator
+          can protect their privileged access to the server, with little
+          additional effort over using standard operator passwords.</para>
   </sect1>
 
   <sect1>
