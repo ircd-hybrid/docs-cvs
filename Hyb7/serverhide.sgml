@@ -17,9 +17,9 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <pubdate role="rcs">$Date: 2001/11/08 05:12:30 $</pubdate>
+    <pubdate role="rcs">$Date: 2001/11/08 05:43:31 $</pubdate>
 
-    <releaseinfo>$Id: serverhide.sgml,v 1.1 2001/11/08 05:12:30 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: serverhide.sgml,v 1.2 2001/11/08 05:43:31 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
@@ -82,7 +82,7 @@
             flattened <command>LINKS</command> list on other servers.
             Opers will of course see the true routing of the network.</para>
 
-      <para>This option is controlled by the <option>hidden</option> in
+      <para>This is controlled by the <option>hidden</option> option in
             <filename>ircd.conf</filename>.</para>
 
       <sidebar>
@@ -96,7 +96,7 @@
     </listitem>
 
     <listitem>
-      <para>The <option>allow_hidden</option> is needed to allow servers
+      <para>The <option>allow_hidden</option> option is needed to allow servers
             to use the <option>hidden</option> described above.</para>
     </listitem>
 
