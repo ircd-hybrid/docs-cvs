@@ -10,6 +10,10 @@ substitutions are listed in order.  The default text is not listed, as
 it is easily (and often) changed.  If a : is listed in the text, it is
 sent explicitly by the server.
 
+This group of numerics is used during the registration phase of a client
+connection to provide some information to the user.  The replies for MAP
+are also in here.
+
 RPL_WELCOME          001  :Welcome text, containing NETWORKNAME and NICK
               Used right when a user it properly registered to the server.
 RPL_YOURHOST         002  :Lists the SERVERHOST and the VERSION
@@ -42,15 +46,69 @@ RPL_YOURID           020  ID KEY :description text
               Not currently used.  This will be used for persistant client
               and cookies support.  This is semi-compatible with TS4's
               cookie implementation.
-RPL_TRACELINK        200
-RPL_TRACECONNECTING  201
-RPL_TRACEHANDSHAKE   202
-RPL_TRACEUNKNOWN     203
-RPL_TRACEOPERATOR    204
-RPL_TRACEUSER        205
-RPL_TRACESERVER      206
-RPL_TRACENEWTYPE     208
-RPL_TRACECLASS       209
+
+This group of numerics is used for replies to TRACE.
+
+RPL_TRACELINK        200  link VERSION QUERY SERVERNAME
+              This is used when TRACE'ing to a remote server.  A 200 is
+              received from each server along the path before the TRACE
+              gets to the the server queried.  The link text can be
+              localized.
+RPL_TRACECONNECTING  201  try CLASS SERVER
+              This numeric is used when trying to connect to a server, but
+              it has not successfully made a connection yet.  The try text
+              can be localized.
+RPL_TRACEHANDSHAKE   202  h.s. CLASS SERVER
+              This numeric is shown when a server is attempting to connect
+              to another server, and is in the process of negotiating a
+              connection.  The h.s. text can be localized.
+RPL_TRACEUNKNOWN     203  ???? CLASS NICKUSERHOST (IP) IDLETIME
+              This numeric is shown when a client or server is attempting
+              to connect in but has not issued any of the required commands.
+              NICKUSERHOST is in the form NICK[USERNAME@HOSTNAME], where
+              NICK is only shown if the client has issued the NICK command,
+              but not USER.  USERNAME is unknown if there was no ident
+              response.  The class is likely unknown.  Hybrid 6 and prior
+              used class -3 instead.
+RPL_TRACEOPERATOR    204  oper CLASS NICKUSERHOST (IP) LASTTIME IDLETIME
+              This numeric is shown to signify a client connection that
+              has sucessfully issued the OPER command.  In NICKUSERHOST,
+              the USERNAME is unknown if there was no ident response.  The
+              LASTTIME is how long ago we received a command from the user.
+              The oper text can be localized.
+RPL_TRACEUSER        205  user CLASS NICKUSERHOST (IP) LASTTIME IDLETIME
+              This numeric is shown to signify a regular user connection.
+              The fields are identical to above.  The user text can be
+              localized.
+RPL_TRACESERVER      206  serv CLASS SERVERCOUNT CLIENTCOUNT
+                          SERVERNAMEUSERHOST CONNECTOR LASTTIME
+              This numeric is sent to signify a server connection.  The
+              SERVERCOUNT is the number of servers seen downstream from
+              the server link, in the format numberS.  The CLIENTCOUNT
+              is the number of clients introduced downstream from that
+              link, in the format numberC.  The SERVERNAMEUSERHOST is the
+              SERVERNAME[USERNAME@HOSTNAME] of the server.  USERNAME is
+              unknown if there is no ident reply.  The CONNECTOR is the
+              NICKNAME!USERNAME@HOSTNAME of the oper who issued the
+              CONNECT command.  This field is AutoConn.!*@LOCALSERVERNAME
+              if the server was linked by an autoconn rule in the ircd.conf
+              file.  This field is *!*@LOCALSERVERNAME if the server
+              connected to us, rather than connecting out to it.
+              LOCALSERVERNAME is the server that you are querying.  The
+              serv text can be localized.
+RPL_TRACENEWTYPE     208  <newtype> 0 NAME
+              This numeric is something that should never be sent.  It
+              signifies a connection that is not a client, server, unknown
+              handshaking, me, or oper connection.  The NAME is whatever
+              identifier is associated with the connection.  The newtype
+              text can be localized
+RPL_TRACECLASS       209  class CLASS NUMBER
+              The 209 numeric is sent towards the end of the TRACE reply,
+              with brief statistics on the number of clients in each class.
+              The class text can be localized.
+
+The following group of numerics is used for replies to STATS queries.
+
 RPL_STATSLINKINFO    211
 RPL_STATSCOMMANDS    212
 RPL_STATSCLINE       213
@@ -215,4 +273,4 @@ ERR_GHOSTEDCLIENT    503
 ERR_USERNOTONSERV    504
 ERR_LAST_ERR_MSG     505
 
-# $Id: numerics.txt,v 1.1 2001/08/29 02:14:28 wcampbel Exp $
+# $Id: numerics.txt,v 1.2 2001/08/30 01:52:01 wcampbel Exp $
