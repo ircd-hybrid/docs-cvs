@@ -1,0 +1,62 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+  <articleinfo>
+    <title>Hybrid 7 Numerics Reference</title>
+
+    <author>
+      <firstname>W.</firstname>
+      <surname>Campbell</surname>
+      <affiliation>
+        <address><email>wcampbel@botbay.net</email></address>
+      </affiliation>
+    </author>
+
+    <copyright>
+      <year>2001</year>
+      <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
+    </copyright>
+
+    <pubdate role="rcs">$Date: 2002/01/30 03:02:51 $</pubdate>
+
+    <releaseinfo>$Id: numerics.sgml,v 1.1 2002/01/30 03:02:51 wcampbel Exp $</releaseinfo>
+
+  </articleinfo>
+
+  <para>This is a comprehensive list and description of all of the
+        <application>Hybrid 7</application> numerics that can be generated
+        by the server.  This document is designed for client and script
+        writers, to provide an easier way to get this information than having
+        to read the source code themselves.</para>
+
+  <para>All numerics are of the form <command>:<replaceable>originating.server
+        numeric user parameters</replaceable></command>.  The parameters are
+        described after listing the numerics.  Words in all capital letters
+        are items that the server will insert text.  All substitutions are
+        listed in order.  The default text is not listed, as it is easily (and
+        often) changed.  If a <emphasis>:</emphasis> is listed in the text, it
+        is sent explicitly by the server.</para>
+
+  <sect1>
+    <title>Numeric Table</title>
+
+    <informaltable>
+      <tgroup cols="4">
+        <thead>
+          <row>
+            <entry>Name</entry>
+            <entry>Numeric</entry>
+            <entry>Parameters</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+
+        <!-- XXX - ADD IN GENERATED DATA -->
+
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </sect1>
+</article>

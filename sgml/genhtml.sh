@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id: genhtml.sh,v 1.3 2002/01/30 03:02:53 wcampbel Exp $
 
 # Horribly written shell script, pass it the base name of an SGML file
 # and it will generate an HTML output file and clean it up
