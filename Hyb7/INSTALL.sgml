@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: INSTALL.sgml,v 1.5 2002/02/05 04:04:08 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: INSTALL.sgml,v 1.6 2002/03/07 13:25:55 wcampbel Exp $</releaseinfo>
   </articleinfo>
 
   <sidebar>
@@ -94,15 +94,10 @@
           </listitem>
 
           <listitem>
-            <para><option>--enable-rtsigio</option> - Enable the experimental
+            <para><option>--enable-rtsigio</option> - Enable the superior
                   <application>Linux</application> RealTime Signal I/O
-                  system.  This code works, but is still considered experimental
-                  and therefore not for use on production servers.</para>
-
-            <note>
-              <para>The <emphasis>Hybrid Team</emphasis> would like feedback
-                    from people who are willing to test this option.</para>
-            </note>
+                  system.  This is currently only available on 2.4 Linux
+                  kernel versions or later.</para>
           </listitem>
 
           <listitem>
