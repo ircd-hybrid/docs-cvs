@@ -101,7 +101,7 @@ RPL_TRACENEWTYPE     208  <newtype> 0 NAME
               signifies a connection that is not a client, server, unknown
               handshaking, me, or oper connection.  The NAME is whatever
               identifier is associated with the connection.  The newtype
-              text can be localized
+              text can be localized.
 RPL_TRACECLASS       209  class CLASS NUMBER
               The 209 numeric is sent towards the end of the TRACE reply,
               with brief statistics on the number of clients in each class.
@@ -109,16 +109,79 @@ RPL_TRACECLASS       209  class CLASS NUMBER
 
 The following group of numerics is used for replies to STATS queries.
 
-RPL_STATSLINKINFO    211
-RPL_STATSCOMMANDS    212
-RPL_STATSCLINE       213
-RPL_STATSNLINE       214
-RPL_STATSILINE       215
-RPL_STATSKLINE       216
-RPL_STATSQLINE       217
-RPL_STATSYLINE       218
-RPL_ENDOFSTATS       219
-RPL_STATSPLINE       220
+RPL_STATSLINKINFO    211  !!! THIS NUMERIC IS UNUSED !!!
+              This numeric is obsolete.
+RPL_STATSCOMMANDS    212  COMMAND COUNT BYTES
+              The 212 numeric is sent as a reply to STATS m, listing
+              all supported commands and their usage and byte counts.
+RPL_STATSCLINE       213  TYPE HOST_OR_IP FLAGS SERVERNAME PORT CLASS
+              This numeric shows connect block information.  The type will
+              almost always be C.  The host or ip field contains the real
+              user@host of destination connection to admins, a masked IP
+              to regular opers and non-opers (if STATS c is permitted).
+              The servername is the name of the connected server on the IRC
+              network.  This can be different than what the server calls
+              itself, for example *.au instead of efnet.telstra.net.au.
+              The port specifies the default port to connect to, if none is
+              specified in a CONNECT command.  The class field is the class 
+              name used for this connection.  The flags are any of the
+              following:
+              A = Autoconnect if a valid port is also used
+              C = CryptLink configured and enabled
+              L = LazyLink enabled
+              Z = ZipLinks enabled
+              M = The server name field is fake
+              * = No special options are enabled for this link
+RPL_STATSNLINE       214  !!! THIS NUMERIC IS UNUSED !!!
+              This numeric is obsolete.
+RPL_STATSILINE       215  TYPE IP * USERHOST 0 CLASS
+              This numeric is returned on STATS i requests.  The type is a
+              little 'i' if the auth block is restricted, 'I' if not.  The
+              IP is the CIDR mask specified in the auth block, or in the
+              case of spoofed auth blocks, the spoofed hostname.  The
+              userhost field is the user@host authorized to match the
+              auth block.  The class is the class name the user is assigned
+              to.
+RPL_STATSKLINE       216  TYPE HOST * USER REASON
+              The 216 numeric is sent in reply to STATS k or K.  The type is
+              'k' for a temporary K-line (one that will remove after a
+              certain period of time) and 'K' for a permanent one.  The
+              host field is the hostmask or IP mask banned, and the user field
+              is the username mask.  Unlike auth blocks, ~ is permitted.
+              The reason is NOT preceded by a ':'
+RPL_STATSQLINE       217  TYPE NAME REASON
+              This numeric shows resv entries.  The type is 'q' if it is a
+              dynamic resv entry, and 'Q' if it is permanent from the conf.
+              The name is the channel, nick, or nick mask blocked, and the
+              reason defines why it is blocked.  Look at resv.txt for more
+              information.
+RPL_STATSYLINE       218  Y NAME PING INTERVAL MAX SENDQ
+              This numeric displays class entries, which are depended on by
+              large sections of the conf.  The name is the class name that
+              a link is associated with.  The ping field displays the ping
+              timing for the connection.  The interval in servers defines
+              how often to attempt to autoconnect to a server placed in
+              this class.  On user classes, this defines how many users from
+              the same user@host are allowed on the server at the same time.
+              The max variable defines how many total users in this class
+              are permitted on the server.  The sendQ is the maximum size of
+              the buffer queue to be sent to the client can be before the
+              client is disconnected.  The Y is a static character.
+RPL_ENDOFSTATS       219  TYPE :description text
+              This numeric is sent at the end of every STATS query, even
+              if the user does not have permission to issue the query.  The
+              type is the STATS character passed in by the client.  The
+              description text is for humans, and can be localized.
+RPL_STATSPLINE       220  P PORT IPHOST CONNECTIONS :STATUS
+              220 is sent on a STATS P query (not STATS p).  The port is the
+              listening port.  IPHOST is the IP or hostname that the server
+              is bound to for that port.  If a non-admin requests STATS P,
+              the server name is sent instead.  The connections field lists
+              the number of connections open to this port.  The status is
+              active or disabled, depending on if the server is currently
+              listening on the configured port.  The 'P' is a static
+              character.  'active' and 'disabled' cannot currently be
+              localized.
 RPL_UMODEIS          221
 RPL_MODLIST          222
 RPL_STATSFLINE       224
@@ -273,4 +336,4 @@ ERR_GHOSTEDCLIENT    503
 ERR_USERNOTONSERV    504
 ERR_LAST_ERR_MSG     505
 
-# $Id: numerics.txt,v 1.2 2001/08/30 01:52:01 wcampbel Exp $
+# $Id: numerics.txt,v 1.3 2001/09/28 04:33:30 wcampbel Exp $
