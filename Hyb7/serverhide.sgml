@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: serverhide.sgml,v 1.7 2002/01/02 15:29:42 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: serverhide.sgml,v 1.8 2002/04/15 13:08:04 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
@@ -172,12 +172,7 @@
             following format:</para>
 
       <para>:<replaceable>user</replaceable> QUIT
-            :<replaceable>your.server.name</replaceable>
-            a.server.on.<replaceable>NetName</replaceable>.net</para>
-
-      <para>The NetName item is replaced with the contents of the
-            <option>network_name</option> option in
-            <filename>ircd.conf</filename>.
+            :<replaceable>your.server.name</replaceable> *.split</para>
 
       <para>This works extremely well as long as all servers on your network
             are compliant with the QS capability, which sends a single
