@@ -1,0 +1,206 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+
+  <para><application>efserv</application> provides a set of operator services
+        to an IRC network running <application>ircd-hybrid</application> or
+        <application>csircd</application>.  Features provided include
+        server juping, clone detection, and "<emphasis>chanfix</emphasis>".
+        </para>
+
+
+  <sect1>
+    <title>Installation</title>
+
+    <para><application>efserv</application> uses standard GNU tools to
+          compile and install.  The following programs are needed:
+          <command>gcc</command>, <command>flex</command>,
+          <command>bison</command>, a working dl library, and BSD or GNU
+          <command>make</command>.</para>
+
+    <procedure>
+      <step>
+        <para>Run configure with the path that the service will run from.</para>
+
+        <!-- unavoidable overrun here -Hwy -->
+<screen>
+<prompt>$</prompt> <userinput>./configure <option>--prefix=<replaceable>/path/to/efserv</replaceable></option></userinput>
+</screen>
+      </step>
+
+      <step>
+        <para>Edit <filename>include/config.h</filename>, changing the settings
+              to your network's needs.</para>
+      </step>
+
+      <step>
+        <para>Run <command>make</command>.</para>
+      </step>
+
+      <step>
+        <para>Run <command>make install</command>.</para>
+      </step>
+
+      <step>
+        <para>Copy <filename>example.conf</filename> to the
+              <filename>etc/</filename> in the pathname specified
+              in the <option>--prefix</option> option, with the name
+              <filename>efserv.conf</filename>.</para>
+      </step>
+
+      <step>
+        <para>Edit <filename>efserv.conf</filename> completely for your
+              network.</para>
+      </step>
+
+      <step>
+        <para>Configure all servers specified with a <option>hub {}</option>
+              block in <filename>efserv.conf</filename> to accept the services
+              pseudoserver linkage.  This will involve configuring
+              <command>C:</command>, <command>N:</command>, and
+              <command>H:</command> lines (or their equivalents).</para>
+      </step>
+    </procedure>
+  </sect1>
+
+  <sect1>
+    <title>Usage</title>
+
+    <para>Much of <application>efserv</application> works automatically,
+          without oper/admin intervention.  The Chanfix aspect of the service
+          is, by default<footnote><para>Manual Chanfix is controlled by the
+          <option>USE_REOP</option> define in
+          <filename>include/config.h</filename>.</para></footnote>, totally
+          automated.</para>
+
+    <sect2>
+      <title>Using Jupe</title>
+
+      <para>In order for an oper to use the <command>JUPE</command> function
+            of <application>efserv</application>, the server the oper is
+            using must be entered in a <option>server {}</option> block in
+            <filename>efserv.conf</filename>.</para>
+
+      <para>To initiate a jupe, an oper issues a command such as the
+            following:</para>
+
+<screen>
+<command>/msg <replaceable>SVC-NICK</replaceable> JUPE <replaceable>bad.server.name</replaceable> <replaceable>reason goes here</replaceable></command>
+</screen>
+
+      <para>XXX - Try to make sense out of the voting code.</para>
+    </sect2>
+
+    <sect2>
+      <title>Using Cycle</title>
+
+      <note><para><option>USE_CYCLE</option> must be defined in
+                  <filename>include/config.h</filename> for this command
+                  to be able to be used.</para></note>
+
+      <para>The <command>CYCLE</command> allows any chanop in a channel to
+            have <application>efserv</application> forcibly close a channel
+            and allow it to be reopened.</para>
+
+      <para>XXX - Provide more information here</para>
+    </sect2>
+
+    <sect2>
+      <title>Using Reop</title>
+
+      <note><para><option>USE_REOP</option> must be defined in
+                  <filename>include/config.h</filename> for this command
+                  to be able to be used.</para></note>
+
+      <para><command>REOP</command> allows an operator to issue a manual
+            chanfix to a channel, opping the users who have the highest
+            score according to the internal databases.</para>
+    </sect2>
+
+    <sect2>
+      <title>Using Monitor</title>
+
+      <para><command>MONITOR</command> allows an operator to enable or
+            disable <emphasis>Monitor</emphasis> mode, which allows an
+            operator to receive alerts on network-wide cloning.  The format
+            of the notice is similar to what is given on EFnet
+            <emphasis>services.us</emphasis>.  The behavior of
+            <application>efserv</application> is proactive in notifying
+            opers, rather than waiting for a <command>CLONES</command>
+            command.</para>
+
+      <para><command>MONITOR</command> accepts a single parameter, either
+            <option>+</option> or <option>-</option>.  <option>+</option> or
+            no parameter enables monitor mode, and <option>-</option>
+            disables monitor mode.</para>
+
+      <para>XXX - There should still be a CLONES command, for when a monitor
+            bot first connects, and to maintain compatibility with current
+            monitor bots.</para>
+    </sect2>
+
+    <sect2>
+      <title>Using SMode</title>
+
+      <para><command>SMODE</command> allows an operator to designate a channel
+            banned from the network, oper only, or services administrator only.
+            </para>
+
+      <para>XXX - Should this be administrator only?</para>
+
+      <para>XXX - This does not yet function completely.  Channel smodes are
+            not yet saved between restarts.</para>
+    </sect2>
+
+    <sect2>
+      <title>Using Admin</title>
+
+      <para>Services administraor access is controlled by the
+            <command>ADMIN</command>.  The syntax is as follows:</para>
+
+<screen>
+<command>/msg <replaceable>SVC-NICK</replaceable> ADMIN <replaceable>nick</replaceable> <replaceable>password</replaceable></command>
+</screen>
+
+      <para>Access to log in as a services administrator is strictly controlled.
+            You must be entered in <filename>efserv.conf</filename> in an
+            <option>admin {}</option> block.  The <literal>user@host</literal>
+            you currently have must match one of the entries in your
+            <option>admin {}</option> block, and you must currently be an
+            IRC operator.</para>
+
+      <para>Administrator access allows you to have more
+            <emphasis>"power"</emphasis> over <command>JUPE</command> and
+            allows the administrator access to the <command>SUNJUPE</command>
+            command.</para>
+    </sect2>
+
+    <sect2>
+      <title>Using Sunjupe</title>
+
+      <para>The <command>SUNJUPE</command> allows a services administrator
+            to completely unjupe a server, bypassing all voting.  The command
+            accepts one parameter, the server name to unjupe.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Running efserv</title>
+
+    <para>When properly installed, <application>efserv</application> is simple
+          to start.  Change into the directory where the service was installed,
+          and issue the following command:</para>
+
+<screen>
+<prompt>$</prompt> <userinput>./efserv >out.log 2>err.log &amp;</userinput>
+</screen>
+
+    <para>The service should start and connect to one of the servers specified
+          in a <option>hub {}</option> block in
+          <filename>etc/efserv.conf</filename>.</para>
+
+    <note><para>The service will send text to <literal>STDOUT</literal> and
+                <literal>STDERR</literal>.  For this reason, the redirections
+                above are needed.</para></note>
+  </sect1>
+</article>
