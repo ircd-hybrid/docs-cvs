@@ -9,7 +9,7 @@
       <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
     </copyright>
 
-    <releaseinfo>$Id: serverhide.sgml,v 1.5 2001/12/16 04:51:38 wcampbel Exp $</releaseinfo>
+    <releaseinfo>$Id: serverhide.sgml,v 1.6 2001/12/30 05:31:03 wcampbel Exp $</releaseinfo>
 
   </articleinfo>
 
@@ -51,8 +51,8 @@
             {}</literal> block in the <filename>ircd.conf</filename> controls
             this feature.</para>
 
-      <para>As a side effect, all netsplits will appear to originate from
-            the local server.</para>
+      <para>As a side effect, all netsplit quit messages will appear to
+            originate from the local server.</para>
 
       <sidebar>
         <para>Flattened <command>LINKS</command> is needed for any network
@@ -156,6 +156,49 @@
             <command>WHOIS</command>.  The
             <option>disable_local_channels</option> option has been created to
             handle this risk.</para>
+    </sect2>
+
+    <sect2>
+      <title>Using Non-QS Compliant Hubs</title>
+
+      <para>The flattened <command>LINKS</command> option will, as a side
+            effect, display all user QUIT's due to network splits in the
+            following format:</para>
+
+      <para>:<replaceable>user</replaceable> QUIT
+            :<replaceable>your.server.name</replaceable>
+            a.server.on.<replaceable>NetName</replaceable>.net</para>
+
+      <para>The NetName item is replaced with the contents of the
+            <option>network_name</option> option in
+            <filename>ircd.conf</filename>.
+
+      <para>This works extremely well as long as all servers on your network
+            are compliant with the QS capability, which sends a single
+            <command>SQUIT</command> to the network when a server (or tree
+            of servers) splits.  All quit messages are generated on the local
+            server.  Certain older servers do not have this ability, and as
+            such will generate their own quit messages for users who left
+            because of the split.  This can cause leaks in the hub server names
+            and the structure of the network.</para>
+
+      <para>A quick example is the following network structure:</para>
+
+      <para>servA(Hyb7) --- hubA(nonQS) --- servB(not-important)</para>
+
+      <para>When <emphasis>servB</emphasis> splits from
+            <emphasis>hubA</emphasis>, <emphasis>hubA</emphasis> will generate
+            a <command>QUIT</command> command for every user on
+            <emphasis>servB</emphasis> (and anything behind
+            <emphasis>servB</emphasis>).  Since the QUIT message was not
+            created on your server, with server hiding enabled, the QUIT message
+            will contain the real server names.</para>
+
+      <para>The only way to prevent this leak on a network is to only use hubs
+            supporting the QS capability.  Hybrid 6, Hybrid 7, and csircd all
+            are currently running daemons that support QS.  Hybrid 5 and
+            2.8.21+CSr servers do not support QS, and will leak server names
+            (and therefore routing information) on splits.</para>
     </sect2>
   </sect1>
 
