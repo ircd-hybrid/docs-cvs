@@ -211,7 +211,9 @@
           <literal>SIGUSR1</literal>.  <literal>SIGUSR1</literal> is used to
           force efserv to reload it's module<footnote><para>
           <literal>SIGUSR1</literal> allows the service to be upgraded on the
-          fly, without having a restart.</para></footnote>.
+          fly, without having a restart.  You may have to send a command to
+          the service in order for the module to actually reload, due to the
+          way efserv operates.</para></footnote>.
           <literal>SIGHUP</literal> will force the service to reload the
           configuration file.</para>
   </sect1>
