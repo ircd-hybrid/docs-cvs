@@ -1,0 +1,127 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+  <articleinfo>
+    <title>Compiling and Using Hybrid 7 Under Cygwin</title>
+
+    <author>
+      <firstname>W.</firstname>
+      <surname>Campbell</surname>
+    </author>
+
+    <copyright>
+      <year>2002</year>
+      <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
+    </copyright>
+
+    <releaseinfo>$Id: Cygwin.sgml,v 1.1 2002/01/27 01:57:25 wcampbel Exp $</releaseinfo>
+
+    <abstract>
+      <para>Brief instructions for Cygwin compilation.</para>
+    </abstract>
+  </articleinfo>
+
+  <important>
+    <para>Cygwin support is not complete, however is does work.  The Hybrid
+          developers do not recommend using Cygwin as a production platform
+          for IRC servers.  Cygwin support is primarily included only for
+          testing purposes, and to verify that the daemon will compile with
+          a baseline POSIX system.</para>
+  </important>
+
+  <sect1>
+    <title>Requirements</title>
+
+    <para>A reasonably current Cygwin installation is needed.  The following
+          programs are needed to compile Hybrid 7:  flex, bison, gcc, bash,
+          binutils, crypt, gettext<footnote><para>gettext is only needed to
+          provide dynamically changeable message files</para></footnote>,
+          libintl<footnote><para>libintl is part of gettext</para></footnote>,
+          make, openssl<footnote><para>At the present time, encrypted links
+          cannot function on Cygwin.  OpenSSL is used for SSL protected oper
+          blocks in addition to encrypted links, so it is still beneficial to
+          include this program.</para></footnote>, sed, gawk, textutils,
+          zlib<footnote><para>zlib is truly not used since compressed links
+          cannot currently function on Cygwin.</para></footnote>.</para>
+
+    <para>All of these programs are installed with the default Cygwin install.
+          If you customize the installation, however, you must be sure that all
+          of the needed packages are installed.</para>
+  </sect1>
+
+  <sect1>
+    <title>Compilation Instructions</title>
+
+    <para>Compiling Hybrid 7 on Cygwin is often a more involved process than
+          compilation on Linux, FreeBSD, or Solaris.  There are options that
+          must be passed to configure in order for compilation to work, and
+          certain non-essential aspects of the build and install process do
+          not currently function.</para>
+
+    <procedure>
+      <step><para>Decide where the ircd will be installed.  This path is vital.
+                  </para></step>
+
+      <step><para>Run the configure script with the
+                  <option>--disable-shared-modules</option> command line option
+                  and the desired installation path specified in the
+                  <option>--prefix</option> option.</para>
+
+            <screen>
+<prompt>$</prompt> <command>./configure --prefix=<userinput>/path/to/installed/ircd</userinput> --disable-shared-modules</command>
+            </screen>
+            </step>
+
+      <step><para>Run <command>make</command></para></step>
+
+      <step><para>Run <command>make install</command></para></step>
+
+      <step><para>Configure the ircd as you normally would.  Please note the
+                  additional considerations described below.</para></step>
+    </procedure>
+  </sect1>
+
+  <sect1>
+    <title>Important Considerations</title>
+
+    <para>Cygwin does not implement all of the functionality used by certain
+          parts of Hybrid.  Because of this, certain features will not work.
+          </para>
+
+    <itemizedlist>
+      <listitem><para>Encrypted links and zip links do not currently work.
+                      These two services are provided by the external
+                      <command>servlink</command> process, which, although
+                      runs, cannot transfer data between the network connection
+                      and the ircd process.  This may only be a temporary issue.
+                      </para></listitem>
+
+      <listitem><para>Loadable modules do not currently function.  Due to the
+                      design of Windows DLL files, a module cannot be compiled
+                      with runtime resolvable symbols.  Modules can only be
+                      configured statically, and as such, you can only use
+                      the stock Hybrid 7 modules without code modifications.
+                      The modifications will be described in a future version
+                      of this document.</para></listitem>
+
+      <listitem><para><command>make</command> cannot currently generate
+                      index files for the help system.  The
+                      <command>column</command> command is not present on
+                      Cygwin.</para></listitem>
+
+      <listitem><para><command>make install</command> does not properly handle
+                      the .exe file extension.  As a consequence, when the
+                      install script backs up the old copies of the binaries,
+                      it does not include the .exe extension, so the backup
+                      fails.  The install continues successfully.
+                      </para></listitem>
+    </itemizedlist>
+  </sect1>
+
+  <sect1>
+    <title>Customizing the Static Modules</title>
+
+    <para>XXX - To be completed...</para>
+  </sect1>
+
+</article>
