@@ -1,0 +1,94 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article>
+  <articleinfo>
+    <title>KNOCK Reference</title>
+
+    <author>
+      <firstname>Wendy</firstname>
+      <surname>Campbell</surname>
+      <affiliation>
+        <address><email>wcampbel@botbay.net</email></address>
+      </affiliation>
+    </author>
+
+    <copyright>
+      <year>2001</year>
+      <holder role="mailto:hybrid@the-project.org">ircd-hybrid team</holder>
+    </copyright>
+
+    <pubdate role="rcs">$Date: 2001/11/07 06:34:18 $</pubdate>
+
+    <releaseinfo>$Id: knock.sgml,v 1.1 2001/11/07 06:34:18 wcampbel Exp $</releaseinfo>
+
+  </articleinfo>
+
+  <para><command>KNOCK</command> is an optional feature in Hybrid 6 and later
+        that allows users to request access to a channel that they cannot
+        join without an invite, a key, or a limit raised.</para>
+
+  <para>The concept of <command>KNOCK</command> is credited to Dianora
+        &lt;db@db.net&gt; and written by &lt;anonymous&gt;</para>
+
+  <para>Due to the possibility of abuse, <command>KNOCK</command> is rate
+        limited in two different ways.  <command>KNOCK</command> is controlled
+        by the pacing code, allowing it only to be used once every
+        <literal>PACE_WAIT</literal> seconds serverwide.  It is also limited
+        on a per user basis, allowing one sucessful <command>KNOCK</command>
+        every <literal>KNOCK_DELAY</literal> seconds.</para>
+
+  <para>KNOCK only works in certain circumstances.  These include:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>You must not be banned from the channel</para>
+    </listitem>
+
+    <listitem>
+      <para>The channel must not be +s</para>
+    </listitem>
+
+    <listitem>
+      <para>You must not already be on the channel</para>
+    </listitem>
+
+    <listitem>
+      <para>The channel must be one of:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>+i</para>
+        </listitem>
+
+        <listitem>
+          <para>+k</para>
+        </listitem>
+
+        <listitem>
+          <para>+l and be full</para>
+        </listitem>
+      </orderedlist>
+    </listitem>
+  </itemizedlist>
+
+  <para>If a KNOCK is successful, a NOTICE is sent to channel operators</para>
+
+  <para>Notices sent:</para>
+
+  <screen>
+:<replaceable>server</replaceable> NOTICE <replaceable>user</replaceable> :*** Notice -- Channel is open!
+:<replaceable>server</replaceable> NOTICE <replaceable>user</replaceable> :*** Notice -- You are on channel already!
+:<replaceable>server</replaceable> NOTICE <replaceable>user</replaceable> :*** Notice -- Wait <replaceable>number</replaceable> seconds before another knock
+:<replaceable>server</replaceable> NOTICE <replaceable>user</replaceable> :*** Notice -- Your KNOCK has been delivered
+:<replaceable>user</replaceable> NOTICE <replaceable>channel</replaceable> :KNOCK: <replaceable>channel</replaceable> (<replaceable>nick</replaceable> [<replaceable>username</replaceable>@<replaceable>hostname</replaceable>] has asked for an invite)
+</screen>
+
+  <para>Numerics sent:</para>
+
+  <screen>
+:<replaceable>server</replaceable> 403 <replaceable>user</replaceable> <replaceable>channel</replaceable> :No such channel
+:<replaceable>server</replaceable> 404 <replaceable>user</replaceable> <replaceable>channel</replaceable> :Cannot send to channel
+:<replaceable>server</replaceable> 461 <replaceable>user</replaceable> KNOCK :Not enough parameters
+</screen>
+
+</article>
