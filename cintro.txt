@@ -1,4 +1,4 @@
-($Id: cintro.txt,v 1.2 2001/11/19 17:00:12 wcampbel Exp $)
+($Id: cintro.txt,v 1.3 2001/12/03 22:14:13 davidt Exp $)
 
                     CINTRO an alternative protocol to SJOIN
                     =======================================
@@ -11,11 +11,12 @@ Introduction
 ------------
 
   This document describes the current protocol for introducing clients
-between servers during server bursts (SJOIN). SJOIN is shown to be inefficent
-for client bursts. We propose a vastly simplified protocol for this task.
+between servers during server bursts (SJOIN).  SJOIN is shown to be
+inefficient for client bursts.  We propose a vastly simplified protocol for
+this task.
 
 SJOIN and MODE
------
+--------------
 
   SJOIN is currently used to introduce new clients to a remote server
 both for server bursts and for new clients joining a channel remotely.
@@ -33,9 +34,9 @@ parabuf is a list of parameters for the above modes
 nicks is a list of up to four nicks either with a @ prefix for a chanop
 + prefix for voiced, % for halfop and finally no prefix for non op.
 
-  In a server burst the follwing happens..
+  In a server burst the following happens..
 
-A list of SJOINs is done for all clients on a channel. i.e.
+A list of SJOINs is done for all clients on a channel.  i.e.
 
 :irc.bighub.on.efnet.net SJOIN 991525841 #twilight_zone +stin + :@Larz\
  @comstud @Dianora Flashman
@@ -44,7 +45,8 @@ A list of SJOINs is done for all clients on a channel. i.e.
 
 There then follows a MODE of bans (and possible +e and +I if supported)
 
-:irc.bighub.on.efnet.net MODE #twilight_zone +bb *!*@*.someisp.net *!*@anotherisp.net
+:irc.bighub.on.efnet.net MODE #twilight_zone +bb *!*@*.someisp.net\
+ *!*@anotherisp.net
 
 ...
 
@@ -63,8 +65,8 @@ exactly once.
 
 channel_id is a small integer given by the uplink, it serves to identify
 the introduction of further clients to this channel using a small int.
-Ths channel_id can be cached per server mapping directly internally to the
-channel structure neded.
+This channel_id can be cached per server mapping directly internally to the
+channel structure needed.
 
 chan_modes is a strict list of modes for the channel i.e. sint
 If the channel is modeless a '-' will be sent.
@@ -118,10 +120,11 @@ Each list of masks (bans, exempts, auto-invites) is sent as follows: [1]
 
     :server.prefix CMASKS channel_id b *!*@*.ms *!*@*.aol.com *!*@*.abuse.com
 
-    Upto the limit of the buffer size, after which they are sent on another line.
+    Up to the limit of the buffer size, after which they are sent on another
+    line.
 
 The same rules as above apply here.  If we receive a CMASKS for a mode 
-we dont know:
+we don't know:
 
 :server.prefix CMASKS channel_id z ban_ts person!who@set.mode *!*@*
 
@@ -136,9 +139,9 @@ CMASKS must be sent before users.  This is because in future, support for
 stopping split riding (people joining a +ik channel on a split) may be needed.
 By sending the modes and CMASKS first, you do not have to keep a list of joins
 that need to be sent to local users.  You can check modes first, then MASKS
-when they come.  You would then receive users, and anyone who hasnt been
+when they come.  You would then receive users, and anyone who hasn't been
 removed from the channel, can see the users joining.  This split protection
-does NOT form part of the sjoin replacement, it is just noted here for
+does NOT form part of the SJOIN replacement, it is just noted here for
 future compatibility.
 
 The channel topic (if any) is then sent as:
@@ -188,6 +191,6 @@ Conclusion
 ----------
 
   The use of CINTRO would greatly reduce duplicate information introduction
-on a server burst. It would be less of a "win" for smaller channels.
+on a server burst.  It would be less of a "win" for smaller channels.
 It would in most cases reduce the bandwidth and increase the speed of a
 server burst.
